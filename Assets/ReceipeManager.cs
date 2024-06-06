@@ -11,15 +11,15 @@ public class ReceipeManager : MonoBehaviour
     private System.Random rnd = new();
     public string[] receipe;
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log(other.gameObject.name);
+        Debug.Log(collision.gameObject.name);
         for (int i = 0; i < receipe.Length; i++)
         {
-            if (receipe[i] == other.gameObject.name)
+            if (receipe[i] == collision.gameObject.name)
             {
                 receipe[i] = null;
-                Destroy(other.gameObject);
+                Destroy(collision.gameObject);
                 return;
             }
         }
