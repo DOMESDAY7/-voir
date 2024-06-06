@@ -4,20 +4,16 @@ using UnityEngine;
 
 public class Cube : MonoBehaviour
 {
-    private void OnTriggerEnter(Collider other)
-    {
-        Destroy(this.gameObject);
-    }
+    private Rigidbody rb;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
-        
+        rb = GetComponent<Rigidbody>();
+        rb.AddForce((transform.forward * 100f + transform.up * 45f) * 18f);
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.position += Time.deltaTime * transform.forward * 8;
     }
 }
