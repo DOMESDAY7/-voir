@@ -8,7 +8,13 @@ public class MovementManager : MonoBehaviour
     public Vector3 secondTargetPosition;
     public float moveDuration;
     public float waitDuration;
-
+    public Vector3 toFace;
+    public string[] order;
+    public GameObject dialogBubble;
+    public List<string> receipe;
+    public ReceipeManager receipeManager;
+    public GameObject player;
+    
     private Animator animator;
 
     void Start()
@@ -27,7 +33,30 @@ public class MovementManager : MonoBehaviour
             animator.speed = 0.6f;
         }
 
-        yield return new WaitForSeconds(waitDuration);
+        transform.LookAt(toFace);
+        GameObject bubble = Instantiate(dialogBubble);
+        bubble.transform.position = transform.position + new Vector3(0, 1.5f, 0);
+        bubble.GetComponent<BubbleManager>().player = player;
+        
+        string order = "";
+        receipe.ForEach(e => order += $"{e}\n");
+
+        bubble.GetComponent<BubbleManager>()?.SetText(order);
+
+        // Wait for a specified duration or until the condition is met
+        float elapsedTime = 0;
+        while (elapsedTime < waitDuration)
+        {
+            if (receipeManager.CompareMixture(receipe))
+            {
+                receipeManager.Complete();
+                break;
+            }
+            elapsedTime += Time.deltaTime;
+            yield return null; // Wait for the next frame
+        }
+
+        Destroy(bubble);
 
         yield return StartCoroutine(MoveOverTime(secondTargetPosition, moveDuration));
 
