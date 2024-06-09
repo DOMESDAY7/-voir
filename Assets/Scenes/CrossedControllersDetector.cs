@@ -6,33 +6,43 @@ public class CrossedControllersDetector : MonoBehaviour
     public Transform leftController;
     public Transform rightController;
     public float crossDistanceThreshold = 0.1f; // Adjust this value as needed
+    public GameObject pausePanel; // Reference to the pause panel
     private bool isPaused = false;
-
 
 
     void Update()
     {
         // Check the distance between the two controllers
         float distance = Vector3.Distance(leftController.position, rightController.position);
-        Debug.Log(distance);
 
-        if (distance < crossDistanceThreshold && !isPaused)
+        if (distance <= crossDistanceThreshold && !isPaused)
         {
-            // Controllers are crossed, pause the game
             PauseGame();
+            return;
         }
-        else if (distance >= crossDistanceThreshold && isPaused)
-        {
-            // Controllers are no longer crossed, resume the game
-            ResumeGame();
-        }
+
+         ResumeGame();
+        
+        
+    }
+
+    public void OnResume(){
+        Debug.Log("resume");
+        ResumeGame();
+    }
+
+    public void OnLeave(){
+        Debug.Log("quit");
     }
 
     void PauseGame()
     {
+
+       
         isPaused = true;
         Time.timeScale = 0; // Pause the game
         Debug.Log("Game Paused");
+        pausePanel.SetActive(true); // Show the pause panel
         // Add any other code necessary to pause the game
     }
 
@@ -41,6 +51,7 @@ public class CrossedControllersDetector : MonoBehaviour
         isPaused = false;
         Time.timeScale = 1; // Resume the game
         Debug.Log("Game Resumed");
+        pausePanel.SetActive(false); // Hide the pause panel
         // Add any other code necessary to resume the game
     }
 }
