@@ -20,11 +20,13 @@ public class NPCManager : MonoBehaviour
     private float Timer = 0f;
     private System.Random rnd = new();
     private GameObject[] Spawned;
+    private AudioSource WarpSound;
     int nbClients = 3;
 
     // Start is called before the first frame update
     void Start()
     {
+        WarpSound = GetComponent<AudioSource>();
         Spawned = new GameObject[nbClients];
 
         for (int i = 0; i < Spawned.Length; i++)
@@ -69,6 +71,7 @@ public class NPCManager : MonoBehaviour
                     StartCoroutine(movementScript.MoveAndWaitCoroutine());
                 }
 
+                WarpSound.Play();
                 break;
             }
         }
