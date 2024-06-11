@@ -1,17 +1,29 @@
 using UnityEngine;
-using UnityEngine.XR;
+using UnityEngine.UI;
+using TMPro;
 
 public class Pause : MonoBehaviour
 {
-    // public Transform leftController;
-    // public Transform rightController;
     public GameObject pausePanel; // Reference to the pause panel
+    public Button PauseBtn; // Reference to the pause button
     private bool isPaused = false;
 
-
-    void Update()
+    void Start()
     {
-        
+        // Add the listener for the Pause button
+        PauseBtn.onClick.AddListener(TogglePause);
+    }
+
+    void TogglePause()
+    {
+        if (isPaused)
+        {
+            ResumeGame();
+        }
+        else
+        {
+            PauseGame();
+        }
     }
 
     public void PauseGame()
@@ -20,7 +32,7 @@ public class Pause : MonoBehaviour
         Time.timeScale = 0; // Pause the game
         Debug.Log("Game Paused");
         pausePanel.SetActive(true); // Show the pause panel
-        // Add any other code necessary to pause the game
+        PauseBtn.GetComponentInChildren<TextMeshProUGUI>().text = "Resume"; // Update button text
     }
 
     public void ResumeGame()
@@ -29,6 +41,6 @@ public class Pause : MonoBehaviour
         Time.timeScale = 1; // Resume the game
         Debug.Log("Game Resumed");
         pausePanel.SetActive(false); // Hide the pause panel
-        // Add any other code necessary to resume the game
+        PauseBtn.GetComponentInChildren<TextMeshProUGUI>().text = "Pause"; // Update button text
     }
 }
